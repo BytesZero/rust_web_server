@@ -7,9 +7,21 @@ default-run = "webserice"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+entity = { path = "../entity" }
+migration = { path = "../migration" }
 actix-rt = "2.9.0"
 actix-web = "4.4.0"
 chrono = { version = "0.4.31", features = ["serde"] }
+dotenvy = "0.15.7"
+sea-orm = { version = "0.12.3", features = [
+    "debug-print",
+    "runtime-tokio-rustls",
+    "macros",
+    "mock",
+    "sqlx-mysql",
+    "with-json",
+    "with-chrono",
+] }
 serde = { version = "1.0.188", features = ["derive"] }
 
 [[bin]]

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: yrpassword.
+      MYSQL_DATABASE: app
+      MYSQL_USER: rust
+      MYSQL_PASSWORD: ypassword.
+    ports:
+      - "3306:3306"
+    networks:
+      - nginx_net
+
+  # rust_project:
+  #   build: ./path/to/your/rust/project
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
+  #   networks:
+  #     - nginx_net
+
+networks:
+  nginx_net:
+    driver: bridge

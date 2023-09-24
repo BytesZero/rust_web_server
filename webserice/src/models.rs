@@ -1,8 +1,6 @@
 use super::apperror::AppError;
-use actix_web::{web, HttpResponse, HttpResponseBuilder};
-use chrono::{DateTime, Utc};
+use actix_web::{HttpResponse, HttpResponseBuilder};
 use serde::{Deserialize, Serialize};
-use std::convert::TryFrom;
 
 // 统一返回参数
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -45,37 +43,4 @@ pub fn resp_err(
 
 pub fn resp_err404(msg: &str) -> Result<HttpResponse, AppError> {
     resp_err(&mut HttpResponse::NotFound(), 404, msg)
-}
-
-// 课程
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Course {
-    pub id: Option<usize>,
-    pub name: String,
-    pub desc: String,
-    pub create_time: Option<DateTime<Utc>>,
-}
-
-// impl From<web::Json<Course>> for Course {
-//     fn from(course: web::Json<Course>) -> Self {
-//         Course {
-//             id: None,
-//             name: course.name.clone(),
-//             desc: course.desc.clone(),
-//             create_time: None,
-//         }
-//     }
-// }
-
-impl TryFrom<web::Json<Course>> for Course {
-    type Error = AppError;
-
-    fn try_from(course: web::Json<Course>) -> Result<Self, Self::Error> {
-        Ok(Course {
-            id: None,
-            name: course.name.clone(),
-            desc: course.desc.clone(),
-            create_time: None,
-        })
-    }
 }
