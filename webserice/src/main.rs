@@ -43,7 +43,7 @@ async fn main() -> Result<(), Error> {
         App::new()
             .app_data(share_data.clone())
             .app_data(AppError::json_error(JsonConfig::default()))
-            .configure(general_routes)
+            .configure(default_routes)
             .configure(course_routes)
     };
     println!("Server running at http://localhost:8080/");

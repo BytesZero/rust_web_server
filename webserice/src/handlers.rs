@@ -2,18 +2,19 @@ use super::apperror::AppError;
 use super::models::*;
 use super::state::*;
 use ::entity::course::ActiveModel;
-use actix_web::{web, HttpResponse};
-use chrono::NaiveDateTime;
-// use entity::{course, course::Entity as Course};
 use ::entity::{course, course::Entity as Course};
+use actix_web::{delete, get, post, put, web, HttpResponse};
+use chrono::Utc;
 use sea_orm::*;
 
 // 执行index函数
+#[get("/")]
 pub async fn index() -> Result<HttpResponse, AppError> {
     resp_ok_none("Hello world actix-web!")
 }
 
 // 执行health函数
+#[get("/health")]
 pub async fn health(app_state: web::Data<AppState>) -> Result<HttpResponse, AppError> {
     let health_check_response = &app_state.health_check_response;
     let mut visit_count = app_state.visit_count.lock().unwrap();
@@ -24,12 +25,13 @@ pub async fn health(app_state: web::Data<AppState>) -> Result<HttpResponse, AppE
 }
 
 // 执行course_add函数
+#[post("/add")]
 pub async fn course_add(
     app_state: web::Data<AppState>,
     course: web::Json<course::Model>,
 ) -> Result<HttpResponse, AppError> {
     let mut course: ActiveModel = course.into_inner().into();
-    course.create_time = Set(Some(NaiveDateTime::default()));
+    course.create_time = Set(Some(Utc::now().naive_utc()));
     let result = Course::insert(course).exec(&app_state.db).await;
     match result {
         Ok(resp) => {
@@ -46,6 +48,7 @@ pub async fn course_add(
 }
 
 // 执行course_del函数
+#[delete("/del/{id}")]
 pub async fn course_del(
     app_state: web::Data<AppState>,
     params: web::Path<i32>,
@@ -65,6 +68,7 @@ pub async fn course_del(
 }
 
 // 执行course_update函数
+#[put("/update")]
 pub async fn course_update(
     app_state: web::Data<AppState>,
     params: web::Json<course::Model>,
@@ -88,6 +92,7 @@ pub async fn course_update(
 }
 
 // 执行course_get函数
+#[get("/get/{id}")]
 pub async fn course_get(
     app_state: web::Data<AppState>,
     params: web::Path<i32>,
@@ -101,6 +106,7 @@ pub async fn course_get(
 }
 
 // 执行course_list函数
+#[get("/course/list")]
 pub async fn course_list(app_state: web::Data<AppState>) -> Result<HttpResponse, AppError> {
     let course_list = Course::find().all(&app_state.db).await;
     match course_list {
