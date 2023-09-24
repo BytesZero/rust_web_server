@@ -1,25 +1,34 @@
-use actix_web::{web, App, Error, HttpResponse, HttpServer, Responder};
+#[path = "app_error.rs"]
+mod apperror;
+#[path = "handlers.rs"]
+mod handlers;
+#[path = "models.rs"]
+mod models;
+#[path = "routers.rs"]
+mod routers;
+#[path = "state.rs"]
+mod state;
 
-// 配置路由
-pub fn general_routes(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::resource("/").route(web::get().to(index)))
-        .service(web::resource("/health").route(web::get().to(health)));
-}
+use actix_web::{
+    web::{self, JsonConfig},
+    App, Error, HttpServer,
+};
+use routers::*;
+use state::*;
 
-// 处理请求
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body("Hello world actix-web!")
-}
-
-// 健康检查
-async fn health() -> impl Responder {
-    HttpResponse::Ok().body("ok")
-}
+use crate::apperror::AppError;
 
 // 启动服务
 #[actix_rt::main]
 async fn main() -> Result<(), Error> {
-    let app = move || App::new().configure(general_routes);
+    let share_data = web::Data::new(AppState::new());
+    let app = move || {
+        App::new()
+            .app_data(share_data.clone())
+            .app_data(AppError::json_error(JsonConfig::default()))
+            .configure(general_routes)
+            .configure(course_routes)
+    };
     println!("Server running at http://localhost:8080/");
     HttpServer::new(app).bind("0.0.0.0:8080")?.run().await?;
     Ok(())
