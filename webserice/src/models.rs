@@ -28,9 +28,9 @@ pub fn resp_ok_none(msg: &str) -> Result<HttpResponse, AppError> {
 }
 
 // 返回成功但处理有错误，无data
-// pub fn resp_ok_err(code: i16, msg: &str) -> Result<HttpResponse, AppError> {
-//     resp(&mut HttpResponse::Ok(), code, msg, None::<()>)
-// }
+pub fn resp_ok_err(code: i16, msg: &str) -> Result<HttpResponse, AppError> {
+    resp(&mut HttpResponse::Ok(), code, msg, None::<()>)
+}
 
 // 统一返回失败
 pub fn resp_err(

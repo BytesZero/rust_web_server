@@ -21,7 +21,8 @@ impl fmt::Display for AppError {
 
 impl AppError {
     pub fn json_error(config: JsonConfig) -> JsonConfig {
-        config.error_handler(|_, _req| {
+        config.error_handler(|err, _req| {
+            println!("JsonPlayloadError err: {:?}", err);
             let app_err = AppError {
                 code: 400,
                 msg: String::from("请求参数错误"),
