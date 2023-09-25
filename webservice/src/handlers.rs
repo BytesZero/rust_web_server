@@ -106,7 +106,7 @@ pub async fn course_get(
 }
 
 // 执行course_list函数
-#[get("/course/list")]
+#[get("/list")]
 pub async fn course_list(app_state: web::Data<AppState>) -> Result<HttpResponse, AppError> {
     let course_list = Course::find().all(&app_state.db).await;
     match course_list {

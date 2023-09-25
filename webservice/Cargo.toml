@@ -1,8 +1,8 @@
 [package]
-name = "webserice"
+name = "webservice"
 version = "0.1.0"
 edition = "2021"
-default-run = "webserice"
+default-run = "webservice"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

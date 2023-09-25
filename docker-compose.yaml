@@ -13,14 +13,14 @@ services:
     networks:
       - nginx_net
 
-  # rust_project:
-  #   build: ./path/to/your/rust/project
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mysql
-  #   networks:
-  #     - nginx_net
+  rust_project:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - nginx_net
 
 networks:
   nginx_net:

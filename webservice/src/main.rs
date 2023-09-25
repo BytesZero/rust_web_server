@@ -26,17 +26,11 @@ use crate::apperror::AppError;
 // 启动服务
 #[actix_rt::main]
 async fn main() -> Result<(), Error> {
-    std::env::set_var("RUST_LOG", "debug");
     // 读取配置文件
     dotenvy::dotenv().ok();
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
-    for (key, value) in env::vars() {
-        println!("{key}: {value}");
-    }
     // 连接数据库
     let conn = Database::connect(&db_url).await.unwrap();
-    // Migrator::up(&conn, None).await.unwrap();
-
     // 启动 Web 服务
     let share_data = web::Data::new(AppState::new(conn));
     let app = move || {
